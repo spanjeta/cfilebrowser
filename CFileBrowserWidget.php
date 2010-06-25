@@ -114,15 +114,6 @@ class CFileBrowserWidget extends CWidget
 	
 	
 	/**
-	 * This widget folder name
-	 * 
-	 * @access	private
-	 * @var		string
-	 */
-	private $_widgetFolder = 'filebrowser';
-	
-	
-	/**
 	 * The init method
 	 * 
 	 * @access 	public
@@ -135,9 +126,6 @@ class CFileBrowserWidget extends CWidget
 		
 		$this->_loadScripts();
 		$this->_loadStyles();
-		
-		$d = array_slice(explode('/', dirname(__FILE__)),-1);
-		$this->_widgetFolder = $d[0];
 		
 		parent::init();
 	}
@@ -153,6 +141,9 @@ class CFileBrowserWidget extends CWidget
 	 */
 	public function run()
 	{
+		if(empty($this->script))
+			throw new CException('Please specify the script url to the plugins connector');
+			
 		$script = '';
 		
 		if(is_array($this->script))
@@ -177,7 +168,7 @@ class CFileBrowserWidget extends CWidget
 		$cs=Yii::app()->getClientScript();
 		$cs->registerCoreScript('jquery');
 		
-		$basePath = Yii::getPathOfAlias('application.extensions.'.$this->_widgetFolder.'.assets');
+		$basePath = Yii::getPathOfAlias('application.extensions.cfilebrowser.assets');
 		$baseUrl = Yii::app()->getAssetManager()->publish($basePath);
 		
 		$cs->registerScriptFile($baseUrl.'/jquery.easing.js');
@@ -197,7 +188,7 @@ class CFileBrowserWidget extends CWidget
 		
 		$cs=Yii::app()->getClientScript();
 		
-		$basePath = Yii::getPathOfAlias('application.extensions.filebrowser.assets');
+		$basePath = Yii::getPathOfAlias('application.extensions.cfilebrowser.assets');
 		$baseUrl = Yii::app()->getAssetManager()->publish($basePath);
 		
 		if(is_null($this->cssFile))
